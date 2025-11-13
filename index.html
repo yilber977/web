@@ -1,84 +1,868 @@
 <!DOCTYPE html>
-<html> 
-   <head> 
-<title>CORPORATE EMPLOYEE DATABASE SYSTEM</title>
-   </head>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CORPORATE EMPLOYEE DATABASE SYSTEM — Proyecto SENATIC</title>
+<style>
+  /* ---------- RESET Y VARIABLES ---------- */
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  :root{
+    --accent-1:#0f172a;
+    --accent-2:#1f3b73;
+    --accent-3:#3b82f6;
+    --accent-4:#7c3aed;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --success:#16a34a;
+    --danger:#dc2626;
+    --glass: rgba(255,255,255,0.6);
+    --shadow: 0 8px 28px rgba(15,23,42,0.08);
+    --radius: 12px;
+  }
+  body{
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(180deg,#eef2ff 0%, #f6f9ff 60%);
+    color:var(--accent-1);
+    min-height:100vh;
+    display:flex;
+  }
 
-   <body> 
-       <!-- Encabezado de la página -->
-       <header>    
-       <strong><h1>CORPORATE EMPLOYEE DATABASE SYSTEM</h1></strong>
-       <img src="CORPORATE EMPLOYEE DATABASE SYSTEM.jpg"alt="Logo del sistema" width="200">
-       <br />
-       <h3>NOMBRE: YILBER STYFF PAJARITO SÁNCHEZ</h3>
-       <h3>GRADO: 1104</h3>
-       <h3>COLEGIO: INSTITUTO EDUCATIVO DEPARTAMENTAL BOLIVAR</h3>
-       </header>
-       <br />
-       <br />
-       <!-- Sección de objetivos-->
-       <section>
-       <h2>OBJETIVOS GENERALES</h2>
-       	<strong><p><li>DISEÑAR E IMPLEMENTAR UN SISTEMA DE BASE DE DATOS QUE PERMITA REGISTRAR, ORGANIZAR Y CONSULTAR DE MANERA EFICIENTE LA INFORMACIÓN PERSONAL, LABORAL Y ADMINISTRATIVA DE LOS EMPLEADOS, OPTIMIZANDO LOS PROCESOS DE RECURSOS HUMANOS Y GARANTIZANDO LA INTEGRIDAD Y CONFIDENCIALIDAD DE LOS DATOS.</li></p></strong>
-       	<br />
-       <h2>OBJETIVOS ESPECÍFICOS<h2>
-    <ul>
-        <h5><p> <li>DISEÑAR LA ESTRUCTURA DE UNA BASE DE DATOS QUE ALMACENE DE FORMA ORGANIZADA LA INFORMACIÓN DE LOS EMPLEADOS, INCLUYENDO DATOS PERSONALES, LABORALES Y DE CONTACTO.</li><br>
-        <li>FACILITAR LA CONSULTA Y GENERACIÓN DE REPORTES MEDIANTE CONSULTAS SQL U OTRA HERRAMIENTA QUE PERMITA EXTRAER DATOS ESPECÍFICOS SEGÚN CRITERIOS DEFINIDOS (POR EJEMPLO, POR DEPARTAMENTO, SALARIO, ANTIGÜEDAD, ETC.).</li><br>
-        <li>GARANTIZAR LA INTEGRIDAD, SEGURIDAD Y CONFIDENCIALIDAD DE LOS DATOS ALMACENADOS MEDIANTE MECANISMOS DE CONTROL DE ACCESO Y RESPALDO DE INFORMACIÓN.</li> <br>
-        <li>OPTIMIZAR EL TIEMPO Y RECURSOS DEL ÁREA DE RECURSOS HUMANOS, ELIMINANDO PROCESOS MANUALES Y MEJORANDO LA TRAZABILIDAD DE LOS REGISTROS DE EMPLEADOS.</li></p></h5>
-        </section>
-    </ul>
-        <!-- Sección de Misión y Visión -->
-        <section>
-        <br />
-        <h2>MISIÓN</h2>
-        <h4><p><li>PROPORCIONAR UNA PLATAFORMA EFICIENTE, SEGURA Y ACCESIBLE PARA EL REGISTRO, ALMACENAMIENTO Y CONSULTA DE LA INFORMACIÓN DE LOS EMPLEADOS, FACILITANDO LA GESTIÓN DEL TALENTO HUMANO Y CONTRIBUYENDO A LA TOMA DE DECISIONES ORGANIZACIONALES OPORTUNAS Y ACERTADAS.</li></p></h4>
-        <br />
-        <h2>VISIÓN</h2>
-        <h4><p><li>SER UN SISTEMA LIDER EN LA GESTIÓN DE DATOS DE EMPLEADOS, RECONOCIDO POR SU CONFIABILIDAD, FACILIDAD DE USO Y CAPACITACIÓN DE ADAPTACIÓN A LAS NECESIDADES CAMBIANTES DEL ENTORNO LABORAL Y TECNOLÓGICO.</li></p></h4>
-        </section>
-        <h2>LOGO</h2>
-         <img src="CORPORATE EMPLOYEE DATABASE SYSTEM.jpg">
-        <br />
-        <h2>SLOGAN</h2>
-        <h4><p>"ORDEN, CONTROL Y TALENTO EN UN SOLO CLIC"</p><h4>
-        <br />
-        <!-- Formulario para recolectar datos -->
-    <section>
-        <h2>Registro de Empleados</h2>
-        <form action="#" method="post">
-            <label for="nombre">Nombre del empleado:</label><br>
-            <input type="text" id="nombre" name="nombre" required><br><br>
+  /* ---------- SIDEBAR LATERAL ---------- */
+  .sidebar{
+    width:270px;
+    min-width:270px;
+    background: linear-gradient(180deg,var(--accent-2),var(--accent-3));
+    color:white;
+    padding:24px;
+    position:fixed;
+    left:0; top:0; bottom:0;
+    display:flex; flex-direction:column; gap:18px;
+    box-shadow: 2px 0 20px rgba(15,23,42,0.08);
+    z-index:60;
+  }
+  .brand{ display:flex; gap:12px; align-items:center; }
+  .brand img{ width:56px; height:56px; border-radius:10px; object-fit:cover; border:2px solid rgba(255,255,255,0.12); }
+  .brand h1{ font-size:16px; margin-bottom:2px; }
+  .brand p{ font-size:12px; opacity:0.92; }
 
-            <label for="cargo">Cargo:</label><br>
-            <input type="text" id="cargo" name="cargo"><br><br>
+  nav.side-nav{ display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  nav.side-nav button{
+    background:transparent; color:white; border:none; text-align:left;
+    padding:10px 12px; border-radius:10px; display:flex; gap:10px; align-items:center;
+    font-weight:700; cursor:pointer; transition: all .18s;
+  }
+  nav.side-nav button .icon{ width:36px; height:36px; display:grid; place-items:center; border-radius:8px; background: rgba(255,255,255,0.06); }
+  nav.side-nav button:hover{ transform: translateX(6px); background: rgba(255,255,255,0.04); }
+  nav.side-nav button.active{ background: rgba(255,255,255,0.12); transform: translateX(6px); }
 
-            <label for="fecha">Fecha de ingreso:</label><br>
-            <input type="date" id="fecha" name="fecha"><br><br>
+  .meta{ margin-top:auto; font-size:13px; color: rgba(255,255,255,0.95); }
+  .meta small{ color: rgba(255,255,255,0.85); display:block; margin-bottom:6px; }
 
-            <label for="departamento">Departamento:</label><br>
-            <select id="departamento" name="departamento">
-                <option value="rh">Recursos Humanos</option>
-                <option value="contabilidad">Contabilidad</option>
-                <option value="it">Tecnología</option>
-                <option value="ventas">Ventas</option>
-            </select><br><br>
+  /* ---------- MAIN CONTENT ---------- */
+  .main{ margin-left:270px; padding:28px; width:calc(100% - 270px); min-height:100vh; transition: margin-left .2s; }
+  .container{ max-width:1200px; margin:0 auto; }
 
-            <label for="comentarios">Observaciones:</label><br>
-            <textarea id="comentarios" name="comentarios" rows="4"></textarea><br><br>
+  .card{ background:var(--card); border-radius: var(--radius); padding:18px; box-shadow:var(--shadow); }
 
-            <button type="submit">Guardar Registro</button>
+  .page-header{ display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
+  .page-title{ display:flex; gap:14px; align-items:center; }
+  .page-title h2{ color:var(--accent-2); }
+  .muted{ color:var(--muted); font-size:13px; }
+
+  /* ---------- SECCIONES ---------- */
+  section.content{ margin-top:12px; display:none; animation: appear .45s ease both; }
+  @keyframes appear{ from{ opacity:0; transform:translateY(10px) } to{ opacity:1; transform:translateY(0) } }
+
+  .section-title{ color:var(--accent-4); margin-bottom:10px; font-size:18px; }
+
+  /* ---------- FORMULARIO ---------- */
+  form .row{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:10px; }
+  label{ display:block; font-weight:700; font-size:13px; margin-bottom:6px; }
+  input[type="text"], input[type="date"], input[type="email"], input[type="tel"], select, textarea, input[type="number"]{
+    width:100%; max-width:420px; padding:10px 12px; border-radius:10px; border:1px solid #e6eefc; background:linear-gradient(180deg,#fff,#fbfdff);
+    box-shadow: 0 6px 18px rgba(31,59,115,0.03); font-size:14px;
+  }
+  textarea{ min-height:110px; resize:vertical; max-width:100%; }
+  .form-actions{ display:flex; gap:10px; align-items:center; margin-top:8px; }
+
+  .btn{ padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:800; transition:all .16s; }
+  .btn.primary{ background: linear-gradient(90deg,var(--accent-3),var(--accent-4)); color:white; }
+  .btn.primary:hover{ transform:translateY(-3px); box-shadow: 0 12px 30px rgba(124,58,237,0.12); }
+  .btn.ghost{ background:transparent; color:var(--accent-2); border:1px solid rgba(31,59,115,0.08); }
+  .btn.warn{ background:#f59e0b; color:white; }
+  .btn.danger{ background:var(--danger); color:white; }
+
+  /* ---------- TABLA ---------- */
+  .table{ width:100%; border-collapse:collapse; margin-top:12px; }
+  .table th, .table td{ padding:10px 8px; border-bottom:1px solid #eef4ff; text-align:left; font-size:14px; vertical-align:middle; }
+  .table th{ color:var(--muted); font-weight:800; font-size:13px; }
+  .center{ text-align:center; }
+
+  .pill{ display:inline-block; padding:6px 10px; border-radius:999px; background:linear-gradient(90deg,#10b981,#06b6d4); color:white; font-weight:700; font-size:12px; }
+
+  /* ---------- TARJETAS DE EMPLEADO (CASILLAS) ---------- */
+  .cards{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-top:12px; }
+  .emp-card{ padding:12px; border-radius:10px; background: linear-gradient(180deg,#fff,#fbfdff); box-shadow: 0 6px 18px rgba(31,59,115,0.04); display:flex; flex-direction:column; gap:8px; }
+  .emp-card h4{ margin-bottom:6px; color:var(--accent-2); }
+  .emp-row{ display:flex; justify-content:space-between; gap:8px; align-items:center; flex-wrap:wrap; }
+  .emp-meta{ font-size:13px; color:var(--muted); }
+
+  .btn-mini{ padding:7px 8px; border-radius:8px; font-weight:800; font-size:13px; border:none; cursor:pointer; }
+  .btn-mini.edit{ background:transparent; color:var(--accent-2); border:1px solid rgba(31,59,115,0.06); }
+  .btn-mini.del{ background:var(--danger); color:white; }
+  .btn-mini.toggle{ background:transparent; color:var(--accent-3); border:1px solid rgba(31,59,115,0.06); }
+
+  /* ---------- FOOTER ---------- */
+  footer.page-footer{ margin-top:20px; text-align:center; color:var(--muted); font-size:13px; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:980px){ .sidebar{ width:230px; min-width:230px; } .main{ margin-left:230px; width:calc(100% - 230px); } }
+  @media(max-width:700px){ .sidebar{ width:200px; min-width:200px; } .main{ margin-left:200px; width:calc(100% - 200px); padding:16px; } form .row{ flex-direction:column; } }
+  @media(max-width:480px){ .sidebar{ width:160px; min-width:160px; } .main{ margin-left:160px; width:calc(100% - 160px); } nav.side-nav button{ font-size:13px; padding:8px; } .brand h1{ font-size:14px; } }
+</style>
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" aria-label="Menú principal">
+    <div class="brand" title="Corporate Employee Database">
+      <img src="CORPORATE EMPLOYEE DATABASE SYSTEM.jpg" alt="logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%2256%22><rect width=%2256%22 height=%2256%22 fill=%231f3b73 rx=%2210%22/><text x=%2250%25%22 y=%2255%25%22 font-size=%2216%22 fill=%22%23fff%22 font-family=%22Arial%22 text-anchor=%22middle%22>CE</text></svg>';">
+      <div>
+        <h1>Corporate Employee</h1>
+        <p>Database System</p>
+      </div>
+    </div>
+
+    <nav class="side-nav" role="navigation">
+      <button class="active" data-target="inicio" onclick="navigateTo(event)"><span class="icon">🏠</span> Inicio</button>
+      <button data-target="registro" onclick="navigateTo(event)"><span class="icon">✍️</span> Registro</button>
+      <button data-target="lista" onclick="navigateTo(event)"><span class="icon">📋</span> Lista de Empleados</button>
+      <button data-target="casillas" onclick="navigateTo(event)"><span class="icon">🗂️</span> Casillas (Tarjetas)</button>
+      <button data-target="objetivos" onclick="navigateTo(event)"><span class="icon">🎯</span> Objetivos</button>
+      <button data-target="myv" onclick="navigateTo(event)"><span class="icon">📜</span> Misión & Visión</button>
+      <button data-target="logo" onclick="navigateTo(event)"><span class="icon">🖼️</span> Logo & Slogan</button>
+      <button data-target="contacto" onclick="navigateTo(event)"><span class="icon">📬</span> Contacto</button>
+    </nav>
+
+    <div class="meta">
+      <small>Proyecto: SENATIC • 2025</small>
+      <div style="margin-top:8px;">Autores:</div>
+      <div style="margin-top:6px; font-weight:800;">David Alfonso Rodriguez Mediorreal</div>
+      <div style="margin-top:6px; font-weight:800;">Yilber Styff Pajarito Sanchez</div>
+      <div style="margin-top:6px; font-weight:800;">Paula Valentina Villamil Herrera</div>
+      <div style="margin-top:6px; font-weight:800;">Johan Sneider Pascagaza Umbarilla</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="app">
+    <div class="container">
+
+      <!-- HEADER -->
+      <header class="page-header card" id="inicio-section">
+        <div class="page-title">
+          <img src="CORPORATE EMPLOYEE DATABASE SYSTEM.jpg" alt="logo" width="72" style="border-radius:10px;" onerror="this.style.opacity=0.85;">
+          <div>
+            <h2>Corporate Employee Database System</h2>
+            <p class="muted">Proyecto escolar • Sistema completo de registro y gestión de empleados</p>
+            <p class="muted">Autores: David A. Rodriguez M., Yilber S. P. Sánchez, Paula V. V. Herrera, Johan S. P. Umbarilla</p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:center;">
+          <div style="text-align:right;">
+            <div class="muted">Colegio</div>
+            <div><strong>INSTITUTO EDUCATIVO DEPARTAMENTAL BOLIVAR</strong></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- SECCION: INICIO -->
+      <section class="content card" id="inicio" aria-labelledby="titulo-inicio" style="margin-top:14px;">
+        <h3 class="section-title" id="titulo-inicio">Bienvenido</h3>
+        <p class="muted">Este sistema permite el registro completo de empleados, mostrando cada registro en tablas y en tarjetas (casillas). Los registros se guardan en tu navegador (localStorage).</p>
+
+        <div style="display:flex; gap:14px; margin-top:16px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:220px;" class="card">
+            <h4>Autores</h4>
+            <p class="muted">
+              David Alfonso Rodriguez Mediorreal<br>
+              Yilber Styff Pajarito Sanchez<br>
+              Paula Valentina Villamil Herrera<br>
+              Johan Sneider Pascagaza Umbarilla
+            </p>
+          </div>
+
+          <div style="flex:1; min-width:220px;" class="card">
+            <h4>Propósito</h4>
+            <p class="muted">Registrar, editar y administrar información detallada de empleados. Soporta operaciones CRUD (Crear, Leer, Actualizar, Eliminar) desde tu navegador.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION: REGISTRO -->
+      <section class="content card" id="registro" aria-labelledby="titulo-reg">
+        <h3 class="section-title" id="titulo-reg">Registro de Empleados (completo)</h3>
+
+        <form id="employee-form" onsubmit="return saveEmployee(event)">
+          <input type="hidden" id="emp-id" value="">
+          <!-- Primera fila -->
+          <div class="row">
+            <div style="flex:1; min-width:220px;">
+              <label for="nombre">Nombre completo</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Ej: María Pérez" required>
+            </div>
+
+            <div style="flex:1; min-width:220px;">
+              <label for="tipoDocumento">Tipo de documento</label>
+              <select id="tipoDocumento" name="tipoDocumento">
+                <option value="C.C.">Cédula de ciudadanía (C.C.)</option>
+                <option value="T.I.">Tarjeta de identidad (T.I.)</option>
+                <option value="C.E.">Cédula de extranjería (C.E.)</option>
+                <option value="Pasaporte">Pasaporte</option>
+                <option value="NIT">NIT</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Segunda fila -->
+          <div class="row">
+            <div style="flex:1; min-width:220px;">
+              <label for="numeroDocumento">Número de documento</label>
+              <input type="text" id="numeroDocumento" name="numeroDocumento" placeholder="Número">
+            </div>
+
+            <div style="flex:1; min-width:220px;">
+              <label for="fechaNacimiento">Fecha de nacimiento</label>
+              <input type="date" id="fechaNacimiento" name="fechaNacimiento">
+            </div>
+          </div>
+
+          <!-- Tercera fila -->
+          <div class="row">
+            <div style="flex:1; min-width:220px;">
+              <label for="cargo">Cargo / puesto</label>
+              <input type="text" id="cargo" name="cargo" placeholder="Ej: Analista de RRHH">
+            </div>
+            <div style="flex:1; min-width:220px;">
+              <label for="fechaIngreso">Fecha de ingreso</label>
+              <input type="date" id="fechaIngreso" name="fechaIngreso">
+            </div>
+          </div>
+
+          <!-- Cuarta fila -->
+          <div class="row">
+            <div style="flex:1; min-width:220px;">
+              <label for="departamento">Departamento</label>
+              <select id="departamento" name="departamento">
+                <option value="Recursos Humanos">Recursos Humanos</option>
+                <option value="Contabilidad">Contabilidad</option>
+                <option value="Tecnología">Tecnología</option>
+                <option value="Ventas">Ventas</option>
+                <option value="Administración">Administración</option>
+                <option value="Operaciones">Operaciones</option>
+              </select>
+            </div>
+            <div style="flex:1; min-width:220px;">
+              <label for="tipoContrato">Tipo de contrato</label>
+              <select id="tipoContrato" name="tipoContrato">
+                <option value="Indefinido">Indefinido</option>
+                <option value="Termino fijo">Término fijo</option>
+                <option value="Por prestación de servicios">Prestación de servicios</option>
+                <option value="Prácticas">Prácticas</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Quinta fila -->
+          <div class="row">
+            <div style="flex:1; min-width:220px;">
+              <label for="salario">Salario (COP)</label>
+              <input type="number" id="salario" name="salario" min="0" step="1000" placeholder="Ej: 1500000">
+            </div>
+            <div style="flex:1; min-width:220px;">
+              <label for="estadoCivil">Estado civil</label>
+              <select id="estadoCivil" name="estadoCivil">
+                <option value="Soltero">Soltero(a)</option>
+                <option value="Casado">Casado(a)</option>
+                <option value="Union libre">Unión libre</option>
+                <option value="Divorciado">Divorciado(a)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Sexta fila -->
+          <div class="row">
+            <div style="flex:1; min-width:220px;">
+              <label for="correo">Correo electrónico</label>
+              <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com">
+            </div>
+            <div style="flex:1; min-width:220px;">
+              <label for="telefono">Teléfono / celular</label>
+              <input type="tel" id="telefono" name="telefono" placeholder="Ej: +57 312 000 0000">
+            </div>
+          </div>
+
+          <!-- Séptima fila (dirección) -->
+          <div class="row">
+            <div style="flex:1; min-width:220px;">
+              <label for="direccion">Dirección</label>
+              <input type="text" id="direccion" name="direccion" placeholder="Calle / Carrera #">
+            </div>
+            <div style="flex:1; min-width:220px;">
+              <label for="ciudad">Ciudad</label>
+              <input type="text" id="ciudad" name="ciudad" placeholder="Ej: Bogotá">
+            </div>
+          </div>
+
+          <!-- Observaciones y activo -->
+          <div style="margin-top:8px;">
+            <label for="observaciones">Observaciones</label>
+            <textarea id="observaciones" name="observaciones" placeholder="Notas adicionales, alergias, comentarios..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn primary" type="submit" id="save-btn">Guardar Registro</button>
+            <button class="btn ghost" type="button" onclick="resetForm()">Limpiar</button>
+            <button class="btn warn" type="button" onclick="exportCSV()">Exportar CSV</button>
+            <div id="form-msg" class="muted" style="margin-left:10px;"></div>
+          </div>
         </form>
-    </section>
-    <br />
-    <!-- Pie de página -->
-    <footer>
-        <p>© 2025 Sistema de Gestión de Empleados - Proyecto SENATIC</p>
-    </footer>
+      </section>
 
+      <!-- SECCION: LISTA -->
+      <section class="content card" id="lista" aria-labelledby="titulo-lista">
+        <h3 class="section-title" id="titulo-lista">Lista de Empleados (tabla)</h3>
+
+        <div id="no-data" class="muted" style="padding:10px 0;">No hay registros aún. Agrega empleados en la sección "Registro".</div>
+
+        <div id="table-wrap" style="overflow:auto; margin-top:8px; display:none;">
+          <table class="table" id="employees-table" aria-live="polite">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Documento</th>
+                <th>Cargo</th>
+                <th>Fecha Ingreso</th>
+                <th>Departamento</th>
+                <th>Teléfono / Correo</th>
+                <th>Salario</th>
+                <th class="center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="employees-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECCION: CASILLAS (Tarjetas individuales) -->
+      <section class="content card" id="casillas" aria-labelledby="titulo-casillas">
+        <h3 class="section-title" id="titulo-casillas">Casillas de Empleados (tarjetas)</h3>
+        <div id="cards-wrap" class="cards"></div>
+      </section>
+
+      <!-- SECCION: OBJETIVOS -->
+      <section class="content card" id="objetivos" aria-labelledby="titulo-obj">
+        <h3 class="section-title" id="titulo-obj">Objetivos</h3>
+        <h4>Objetivo General</h4>
+        <p class="muted">Diseñar e implementar un sistema de base de datos que permita registrar, organizar y consultar de manera eficiente la información personal, laboral y administrativa de los empleados, optimizando procesos y garantizando la integridad y confidencialidad de los datos.</p>
+
+        <h4 style="margin-top:12px;">Objetivos Específicos</h4>
+        <ul style="margin-top:8px;">
+          <li class="muted">Diseñar una estructura de base de datos organizada para información personal y laboral.</li>
+          <li class="muted">Facilitar la generación de informes por departamento, salario y antigüedad.</li>
+          <li class="muted">Implementar controles de acceso y respaldo de información.</li>
+          <li class="muted">Optimizar procesos de RR.HH. mediante automatización de registros.</li>
+        </ul>
+      </section>
+
+      <!-- SECCION: MISION / VISION -->
+      <section class="content card" id="myv" aria-labelledby="titulo-myv">
+        <h3 class="section-title" id="titulo-myv">Misión y Visión</h3>
+        <h4>Misión</h4>
+        <p class="muted">Proporcionar una plataforma eficiente, segura y accesible para el registro, almacenamiento y consulta de la información de los empleados, facilitando la gestión del talento humano.</p>
+
+        <h4 style="margin-top:12px;">Visión</h4>
+        <p class="muted">Ser un sistema líder en la gestión de datos de empleados, reconocido por su confiabilidad y facilidad de uso.</p>
+      </section>
+
+      <!-- SECCION: LOGO -->
+      <section class="content card" id="logo" aria-labelledby="titulo-logo">
+        <h3 class="section-title" id="titulo-logo">Logo & Slogan</h3>
+        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+          <img src="CORPORATE EMPLOYEE DATABASE SYSTEM.jpg" alt="Logo" width="160" style="border-radius:8px;" onerror="this.style.opacity=0.9;">
+          <div>
+            <h4>Slogan</h4>
+            <p class="muted"><em>"ORDEN, CONTROL Y TALENTO EN UN SOLO CLIC"</em></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION: CONTACTO -->
+      <section class="content card" id="contacto" aria-labelledby="titulo-contact">
+        <h3 class="section-title" id="titulo-contact">Contacto / Soporte</h3>
+        <p class="muted">Proyecto: <strong>Proyecto SENATIC • 2025</strong></p>
+        <p class="muted">Autores: David A. Rodríguez M., Yilber S. P. Sánchez, Paula V. V. Herrera, Johan S. P. Umbarilla</p>
+        <p class="muted"></p>
+        <p class="muted">Conectate con nosotros para mas informacion.</p>
+      </section>
+
+      <footer class="page-footer">
+        © 2025 Sistema de Gestión de Empleados — Proyecto SENATIC
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script>
+    /* -------------------- NAVEGACIÓN -------------------- */
+    const buttons = document.querySelectorAll('nav.side-nav button');
+    const sections = {
+      inicio: document.getElementById('inicio'),
+      registro: document.getElementById('registro'),
+      lista: document.getElementById('lista'),
+      casillas: document.getElementById('casillas'),
+      objetivos: document.getElementById('objetivos'),
+      myv: document.getElementById('myv'),
+      logo: document.getElementById('logo'),
+      contacto: document.getElementById('contacto')
+    };
+
+    function navigateTo(event){
+      const btn = event.currentTarget;
+      const target = btn.getAttribute('data-target');
+
+      // marcar activo
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // ocultar todas las secciones
+      for(const s of Object.values(sections)) s.style.display = 'none';
+
+      // mostrar la sección
+      if(sections[target]) sections[target].style.display = 'block';
+
+      // manejar header principal (inicio-section) visible solo si target = inicio
+      document.getElementById('inicio-section').style.display = (target === 'inicio') ? 'flex' : 'none';
+
+      // scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Inicializar vista
+    window.addEventListener('DOMContentLoaded', () => {
+      // mostrar inicio por defecto
+      document.getElementById('inicio').style.display = 'block';
+      document.getElementById('inicio-section').style.display = 'flex';
+      // cargar empleados
+      ensureSeedData();
+      loadEmployeesToTable();
+      renderEmployeeCards();
+    });
+
+    /* -------------------- STORAGE / DATOS -------------------- */
+    const LS_KEY = 'ce_db_employees_v2';
+
+    function getEmployees(){
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return [];
+      try { return JSON.parse(raw) || []; } catch(e){ return []; }
+    }
+    function saveEmployees(list){
+      localStorage.setItem(LS_KEY, JSON.stringify(list));
+    }
+
+    // Pre-cargar datos iniciales si no existen
+    function ensureSeedData(){
+      const existing = getEmployees();
+      if(existing.length) return;
+
+      const seed = [
+        {
+          id: 'emp_' + Date.now() + '_1',
+          nombre: 'David Alfonso Rodriguez Mediorreal',
+          tipoDocumento: 'C.C.',
+          numeroDocumento: '1001001001',
+          fechaNacimiento: '2000-03-15',
+          fechaIngreso: '2024-02-01',
+          cargo: 'Coordinador de Proyecto',
+          departamento: 'Administración',
+          tipoContrato: 'Indefinido',
+          salario: 2500000,
+          estadoCivil: 'Soltero',
+          correo: 'david.ar@example.com',
+          telefono: '+57 300 000 0001',
+          direccion: 'Cll 10 #5-20',
+          ciudad: 'Bogotá',
+          observaciones: 'Autor principal del proyecto.',
+          activo: true
+        },
+        {
+          id: 'emp_' + (Date.now()+1) + '_2',
+          nombre: 'Yilber Styff Pajarito Sanchez',
+          tipoDocumento: 'C.C.',
+          numeroDocumento: '1001001002',
+          fechaNacimiento: '2001-07-22',
+          fechaIngreso: '2024-03-12',
+          cargo: 'Desarrollador Frontend',
+          departamento: 'Tecnología',
+          tipoContrato: 'Término fijo',
+          salario: 1800000,
+          estadoCivil: 'Soltero',
+          correo: 'yilber.p@example.com',
+          telefono: '+57 312 000 0002',
+          direccion: 'Cra 7 #12-45',
+          ciudad: 'Cartagena',
+          observaciones: 'Encargado del UI/UX.',
+          activo: true
+        },
+        {
+          id: 'emp_' + (Date.now()+2) + '_3',
+          nombre: 'Paula Valentina Villamil Herrera',
+          tipoDocumento: 'C.C.',
+          numeroDocumento: '1001001003',
+          fechaNacimiento: '2002-11-05',
+          fechaIngreso: '2024-05-03',
+          cargo: 'Analista de Datos',
+          departamento: 'Contabilidad',
+          tipoContrato: 'Prestación de servicios',
+          salario: 1600000,
+          estadoCivil: 'Casado',
+          correo: 'paula.v@example.com',
+          telefono: '+57 311 000 0003',
+          direccion: 'Av 30 #40-10',
+          ciudad: 'Medellín',
+          observaciones: 'Responsable de reportes financieros.',
+          activo: true
+        },
+        {
+          id: 'emp_' + (Date.now()+3) + '_4',
+          nombre: 'Johan Sneider Pascagaza Umbarilla',
+          tipoDocumento: 'C.C.',
+          numeroDocumento: '1001001004',
+          fechaNacimiento: '1999-01-28',
+          fechaIngreso: '2024-06-20',
+          cargo: 'Especialista en Soporte',
+          departamento: 'Operaciones',
+          tipoContrato: 'Indefinido',
+          salario: 1500000,
+          estadoCivil: 'Soltero',
+          correo: 'johan.p@example.com',
+          telefono: '+57 310 000 0004',
+          direccion: 'Cll 50 #20-80',
+          ciudad: 'Cali',
+          observaciones: 'Soporte técnico y mantenimiento.',
+          activo: true
+        }
+      ];
+      saveEmployees(seed);
+    }
+
+    /* -------------------- FUNCIONES CRUD -------------------- */
+    function saveEmployee(event){
+      event.preventDefault();
+      // tomar valores
+      const idEl = document.getElementById('emp-id');
+      const id = idEl.value || null;
+      const nombre = document.getElementById('nombre').value.trim();
+      const tipoDocumento = document.getElementById('tipoDocumento').value;
+      const numeroDocumento = document.getElementById('numeroDocumento').value.trim();
+      const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+      const fechaIngreso = document.getElementById('fechaIngreso').value;
+      const cargo = document.getElementById('cargo').value.trim();
+      const departamento = document.getElementById('departamento').value;
+      const tipoContrato = document.getElementById('tipoContrato').value;
+      const salario = Number(document.getElementById('salario').value) || 0;
+      const estadoCivil = document.getElementById('estadoCivil').value;
+      const correo = document.getElementById('correo').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const direccion = document.getElementById('direccion').value.trim();
+      const ciudad = document.getElementById('ciudad').value.trim();
+      const observaciones = document.getElementById('observaciones').value.trim();
+
+      if(!nombre){
+        showFormMsg('El nombre es obligatorio', true); return false;
+      }
+      // preparar objeto
+      let list = getEmployees();
+      if(id){ // editar
+        const idx = list.findIndex(it => it.id === id);
+        if(idx !== -1){
+          list[idx] = {
+            ...list[idx],
+            nombre, tipoDocumento, numeroDocumento, fechaNacimiento, fechaIngreso,
+            cargo, departamento, tipoContrato, salario, estadoCivil, correo, telefono,
+            direccion, ciudad, observaciones
+          };
+          saveEmployees(list);
+          showFormMsg('Registro actualizado', false);
+        } else {
+          showFormMsg('Registro no encontrado', true);
+        }
+      } else { // nuevo
+        const newId = 'emp_' + Date.now();
+        list.push({
+          id: newId, nombre, tipoDocumento, numeroDocumento, fechaNacimiento, fechaIngreso,
+          cargo, departamento, tipoContrato, salario, estadoCivil, correo, telefono,
+          direccion, ciudad, observaciones, activo: true
+        });
+        saveEmployees(list);
+        showFormMsg('Registro guardado', false);
+      }
+
+      resetForm();
+      loadEmployeesToTable();
+      renderEmployeeCards();
+      // ir a lista automáticamente
+      document.querySelector('nav.side-nav button[data-target="lista"]').click();
+      return false;
+    }
+
+    function showFormMsg(msg, isError){
+      const el = document.getElementById('form-msg');
+      el.textContent = msg;
+      el.style.color = isError ? 'var(--danger)' : 'var(--success)';
+      setTimeout(()=> el.textContent = '', 3200);
+    }
+
+    function resetForm(){
+      document.getElementById('employee-form').reset();
+      document.getElementById('emp-id').value = '';
+      document.getElementById('save-btn').textContent = 'Guardar Registro';
+      document.getElementById('form-msg').textContent = '';
+    }
+
+    function loadEmployeesToTable(){
+      const list = getEmployees();
+      const tbody = document.getElementById('employees-body');
+      tbody.innerHTML = '';
+
+      if(!list.length){
+        document.getElementById('table-wrap').style.display = 'none';
+        document.getElementById('no-data').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('table-wrap').style.display = 'block';
+      document.getElementById('no-data').style.display = 'none';
+
+      list.forEach(emp => {
+        const tr = document.createElement('tr');
+
+        const tdName = document.createElement('td');
+        tdName.textContent = emp.nombre;
+        tr.appendChild(tdName);
+
+        const tdDoc = document.createElement('td');
+        tdDoc.textContent = emp.tipoDocumento + ' ' + (emp.numeroDocumento || '-');
+        tr.appendChild(tdDoc);
+
+        const tdCargo = document.createElement('td');
+        tdCargo.textContent = emp.cargo || '-';
+        tr.appendChild(tdCargo);
+
+        const tdFecha = document.createElement('td');
+        tdFecha.textContent = emp.fechaIngreso ? formatDate(emp.fechaIngreso) : '-';
+        tr.appendChild(tdFecha);
+
+        const tdDept = document.createElement('td');
+        tdDept.textContent = emp.departamento || '-';
+        tr.appendChild(tdDept);
+
+        const tdContact = document.createElement('td');
+        tdContact.innerHTML = (emp.telefono ? emp.telefono : '-') + '<br><small>' + (emp.correo ? emp.correo : '-') + '</small>';
+        tr.appendChild(tdContact);
+
+        const tdSal = document.createElement('td');
+        tdSal.textContent = emp.salario ? numberWithCommas(emp.salario) : '-';
+        tr.appendChild(tdSal);
+
+        const tdAcc = document.createElement('td');
+        tdAcc.className = 'center';
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn-mini edit';
+        editBtn.textContent = 'Editar';
+        editBtn.onclick = ()=> editEmployee(emp.id);
+        tdAcc.appendChild(editBtn);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn-mini del';
+        delBtn.textContent = 'Eliminar';
+        delBtn.style.marginLeft = '6px';
+        delBtn.onclick = ()=> deleteEmployee(emp.id);
+        tdAcc.appendChild(delBtn);
+
+        tr.appendChild(tdAcc);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderEmployeeCards(){
+      const list = getEmployees();
+      const wrap = document.getElementById('cards-wrap');
+      wrap.innerHTML = '';
+
+      if(!list.length){
+        wrap.innerHTML = '<div class="muted">No hay empleados registrados.</div>';
+        return;
+      }
+
+      list.forEach(emp => {
+        const card = document.createElement('div');
+        card.className = 'emp-card card';
+
+        const head = document.createElement('div');
+        head.className = 'emp-row';
+        head.innerHTML = `<div>
+            <h4>${escapeHtml(emp.nombre)}</h4>
+            <div class="emp-meta">${escapeHtml(emp.cargo || '-')} • ${escapeHtml(emp.departamento || '-')}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="margin-bottom:6px;">
+              <span class="muted">ID: </span><strong>${escapeHtml(emp.id)}</strong>
+            </div>
+            <div style="display:flex; gap:6px; justify-content:flex-end;">
+              <button class="btn-mini toggle" onclick="toggleActive('${emp.id}')">${emp.activo ? 'Activo' : 'Inactivo'}</button>
+              <button class="btn-mini edit" onclick="editEmployee('${emp.id}')">Editar</button>
+              <button class="btn-mini del" onclick="deleteEmployee('${emp.id}')">Eliminar</button>
+            </div>
+          </div>`;
+
+        card.appendChild(head);
+
+        const body = document.createElement('div');
+        body.className = 'emp-row';
+        body.style.marginTop = '8px';
+        body.innerHTML = `<div>
+          <div class="muted">Documento</div>
+          <div style="font-weight:700">${escapeHtml(emp.tipoDocumento)} ${escapeHtml(emp.numeroDocumento || '-')}</div>
+          <div class="muted" style="margin-top:8px">Fecha Nac. / Ingreso</div>
+          <div>${emp.fechaNacimiento ? formatDate(emp.fechaNacimiento) : '-'} • ${emp.fechaIngreso ? formatDate(emp.fechaIngreso) : '-'}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="muted">Contacto</div>
+          <div>${escapeHtml(emp.telefono || '-')}<br><small>${escapeHtml(emp.correo || '-')}</small></div>
+          <div class="muted" style="margin-top:8px">Dirección</div>
+          <div>${escapeHtml(emp.direccion || '-')}, ${escapeHtml(emp.ciudad || '-')}</div>
+        </div>`;
+
+        card.appendChild(body);
+
+        const foot = document.createElement('div');
+        foot.style.marginTop = '8px';
+        foot.innerHTML = `<div class="muted">Contrato: <strong>${escapeHtml(emp.tipoContrato || '-')}</strong> • Salario: <strong>${emp.salario ? numberWithCommas(emp.salario) : '-'}</strong></div>
+          <div style="margin-top:6px;"><strong>Observaciones:</strong><div class="muted">${escapeHtml(emp.observaciones || '-')}</div></div>`;
+
+        card.appendChild(foot);
+        wrap.appendChild(card);
+      });
+    }
+
+    function editEmployee(id){
+      const list = getEmployees();
+      const emp = list.find(x => x.id === id);
+      if(!emp){ alert('Registro no encontrado'); return; }
+
+      // llenar formulario
+      document.getElementById('emp-id').value = emp.id;
+      document.getElementById('nombre').value = emp.nombre || '';
+      document.getElementById('tipoDocumento').value = emp.tipoDocumento || 'C.C.';
+      document.getElementById('numeroDocumento').value = emp.numeroDocumento || '';
+      document.getElementById('fechaNacimiento').value = emp.fechaNacimiento || '';
+      document.getElementById('fechaIngreso').value = emp.fechaIngreso || '';
+      document.getElementById('cargo').value = emp.cargo || '';
+      document.getElementById('departamento').value = emp.departamento || 'Recursos Humanos';
+      document.getElementById('tipoContrato').value = emp.tipoContrato || 'Indefinido';
+      document.getElementById('salario').value = emp.salario || '';
+      document.getElementById('estadoCivil').value = emp.estadoCivil || 'Soltero';
+      document.getElementById('correo').value = emp.correo || '';
+      document.getElementById('telefono').value = emp.telefono || '';
+      document.getElementById('direccion').value = emp.direccion || '';
+      document.getElementById('ciudad').value = emp.ciudad || '';
+      document.getElementById('observaciones').value = emp.observaciones || '';
+      document.getElementById('save-btn').textContent = 'Actualizar';
+
+      // navegar a registro
+      document.querySelector('nav.side-nav button[data-target="registro"]').click();
+    }
+
+    function deleteEmployee(id){
+      if(!confirm('¿Eliminar este registro? Esta acción no se puede deshacer.')) return;
+      let list = getEmployees();
+      list = list.filter(x => x.id !== id);
+      saveEmployees(list);
+      loadEmployeesToTable();
+      renderEmployeeCards();
+      alert('Registro eliminado');
+    }
+
+    function toggleActive(id){
+      let list = getEmployees();
+      const idx = list.findIndex(x => x.id === id);
+      if(idx === -1) return;
+      list[idx].activo = !list[idx].activo;
+      saveEmployees(list);
+      renderEmployeeCards();
+      loadEmployeesToTable();
+    }
+
+    /* -------------------- UTILIDADES -------------------- */
+    function formatDate(iso){
+      if(!iso) return '';
+      try{
+        const d = new Date(iso);
+        if(isNaN(d)) return iso;
+        return d.toLocaleDateString('es-CO', { year:'numeric', month:'short', day:'numeric' });
+      } catch(e){
+        return iso;
+      }
+    }
+    function numberWithCommas(x){
+      if(!x && x !== 0) return '';
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    function escapeHtml(text){
+      if(!text && text !== 0) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    /* -------------------- EXPORTAR A CSV (simple) -------------------- */
+    function exportCSV(){
+      const list = getEmployees();
+      if(!list.length){ alert('No hay datos para exportar.'); return; }
+      const headers = [
+        'id','nombre','tipoDocumento','numeroDocumento','fechaNacimiento','fechaIngreso','cargo','departamento',
+        'tipoContrato','salario','estadoCivil','correo','telefono','direccion','ciudad','observaciones','activo'
+      ];
+      const rows = list.map(r => headers.map(h => `"${String(r[h] ?? '').replace(/"/g,'""')}"`).join(','));
+      const csv = [headers.join(','), ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'empleados_export.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    /* -------------------- EVENTOS GLOBALES -------------------- */
+    // Guardar el formulario (evento submit)
+    document.getElementById('employee-form').addEventListener('submit', saveEmployee);
+
+    // Permitir export con Ctrl+E (opcional)
+    window.addEventListener('keydown', (e) => {
+      if(e.ctrlKey && e.key.toLowerCase() === 'e'){ e.preventDefault(); exportCSV(); }
+    });
+  </script>
 </body>
-</html>
-   </body>
-
 </html>
